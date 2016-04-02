@@ -5,9 +5,9 @@
 #include<ctime>
 using namespace std;
 int i,j,sw,die;
-int check(int j)
+int check(int x)
 {
-    int x,z;
+    int z;
     if(x==17)
     {
         z=7;
@@ -141,45 +141,60 @@ int game()
         cout<<"Enter a value less than 4.\n";
         goto here;
     }
-    for(i=0;i<=no-1;i++)
+    i=0;
+    do
     {
-        back:
-        if(pos[i]<99)
+        if(i==no)
+        {
+            i=0;
+        }
         cout<<endl<<name[i]<<"'s Turn:\n";
         cout<<"Rolling the Die\n";
         die=(rand()%6)+1;
         cout<<"You've got\n"<<die<<"\n";
-        if(check(die)!=die||pos[i]!=0)
-        {
-            pos[i]=check(pos[i]);
-        }
-        cout<<"Your current position is "<<pos[i]<<".";
+        cout<<"Your Position on Board Now is "<<pos[i]<<".";
         cout<<endl<<"Press any key to let the other play!\n";
         getch();
         if(die==6&&pos[i]==0)
         {
             cout<<"\n"<<name[i]<<" can start the game.\n";
             cout<<"Rolling the die again\n";
+            die=(rand()%6)+1;
             cout<<"You've got\n"<<die<<"\n";
-            pos[i]=(rand()%6)+1;
-            cout<<"Your current position is "<<pos[i]<<".";
+            if(pos[i]<check(die))
+            {
+                cout<<"Congrats! You got a ladder!\n";
+                pos[i]=check(die);
+            }
+            else
+            if(pos[i]>check(die))
+            {
+                cout<<"OOPS! A Snake just bit you!\n";
+                pos[i]=check(die);
+            }
+            cout<<"Your Position on Board Now is "<<pos[i]<<".";
             cout<<endl<<"Press any key to let the other play!\n";
             getch();
         }
         else
-            if
-            (pos[i]!=0)
+        if(pos[i]!=0&&pos[i]!=100)
         {
-            pos[i]+=(rand()%6)+1;
-            goto back;
-            i++;
+            pos[i]+=die;
+            if(pos[i]<check(die))
+            {
+                cout<<"Congrats! You got a ladder!\n";
+                pos[i]=check(die);
+            }
+            else
+            if(pos[i]>check(die))
+            {
+                cout<<"OOPS! A Snake just bit you!\n";
+                pos[i]=check(die);
+            }
         }
-        else
-        {
-            goto back;
-            i++;
-        }
+        i++;
     }
+while(pos[0]<=100||pos[1]<=100||pos[2]<=100||pos[3]<=100);
 }
 int main()
 {
@@ -196,6 +211,7 @@ int main()
     cout<<setw(70)<<"5.TO SEE THE BOARD\n";
     cout<<setw(65)<<"6.PLAY\n\n\n";
     ch=getche();
+
     switch (ch)
     {
         case '1':
